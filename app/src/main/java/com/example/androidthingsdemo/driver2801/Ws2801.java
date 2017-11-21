@@ -17,14 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Device driver for WS2801 RGB LEDs using 2-wire SPI.
- * <p>
- * For more information on SPI, see:
- * https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus
- * For information on the WS2801 protocol, see:
- * https://cdn-shop.adafruit.com/datasheets/WS2801.pdf
- */
+
 public class Ws2801 implements AutoCloseable {
 
     public static Ws2801 ws2801;
@@ -32,11 +25,11 @@ public class Ws2801 implements AutoCloseable {
     private float increment = 0.002f;
     private static final int NUM_LEDS = 33;
     private final int[] mLedColors = new int[NUM_LEDS];
-    // Device SPI Configuration constants
-    private static final int SPI_BPW = 8; // Bits per word
+
+    private static final int SPI_BPW = 8;
     private static final int SPI_FREQUENCY = 1_000_000;
-    private static final int SPI_MODE = SpiDevice.MODE0; // Mode 0 seems to work best for WS2801
-    private static final int WS2801_PACKET_LENGTH = 3; // R, G & B in any order
+    private static final int SPI_MODE = SpiDevice.MODE0;
+    private static final int WS2801_PACKET_LENGTH = 3;
     private Disposable subscribe;
 
     public static Ws2801 getInstance() {
@@ -68,35 +61,20 @@ public class Ws2801 implements AutoCloseable {
 
     private final SpiDevice device;
     private final ColorUnpacker colorUnpacker;
-    // Direction of the led strip;
+
     private final Direction direction;
 
-    /**
-     * Create a new Ws2801 driver.
-     *
-     * @param spiBusPort Name of the SPI bus
-     */
+
     public static Ws2801 create(String spiBusPort) throws IOException {
         return create(spiBusPort, Mode.RGB);
     }
 
-    /**
-     * Create a new Ws2801 driver.
-     *
-     * @param spiBusPort Name of the SPI bus
-     * @param ledMode    The {@link Mode} indicating the red/green/blue byte ordering for the device.
-     */
+
     public static Ws2801 create(String spiBusPort, Mode ledMode) throws IOException {
         return create(spiBusPort, ledMode, Direction.NORMAL);
     }
 
-    /**
-     * Create a new Ws2801 driver.
-     *
-     * @param spiBusPort Name of the SPI bus
-     * @param ledMode    The {@link Mode} indicating the red/green/blue byte ordering for the device.
-     * @param direction  The {@link Direction} or the LED strip.
-     */
+
     public static Ws2801 create(String spiBusPort, Mode ledMode, Direction direction) throws IOException {
         PeripheralManagerService pioService = new PeripheralManagerService();
         try {
@@ -119,13 +97,7 @@ public class Ws2801 implements AutoCloseable {
         device.setBitsPerWord(SPI_BPW);
     }
 
-    /**
-     * Writes the current RGB LED data to the peripheral bus.
-     *
-     * @param colors An array of integers corresponding to a {@link Color}.
-     *               The size of the array should match the number of LEDs in the strip.
-     * @throws IOException if writing to the SPI interface fails.
-     */
+
     public void write(int[] colors) throws IOException {
         byte[] ledData = new byte[WS2801_PACKET_LENGTH * colors.length];
 
@@ -165,7 +137,7 @@ public class Ws2801 implements AutoCloseable {
      * 开始颜色变化
      */
     public void startFlash() {
-        // all LEDs will have the same color
+
         subscribe = Observable.interval(20, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<Long>() {
