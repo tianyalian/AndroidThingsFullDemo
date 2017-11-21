@@ -8,8 +8,6 @@ import com.google.android.things.pio.UartDevice;
 import com.google.android.things.pio.UartDeviceCallback;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,11 +41,11 @@ public class PM25Presenter {
         public boolean onUartDeviceDataAvailable(UartDevice uart) {
             try {
                 byte[] bytes = readDatas();
-//                closeSenser();
-                if (uartListener != null) {
+                if (uartListener != null && bytes[0] == -86) {
                     String result = getPM25(bytes) + getPM10(bytes);
                     if (!TextUtils.isEmpty(result))
                     uartListener.onReceive(result);
+                closeSenser();
                 }
             } catch (IOException e) {
                 Log.w(TAG, "Unable to access UART device", e);
@@ -111,6 +109,7 @@ public class PM25Presenter {
         while ((count = uartDevice.read(buffer, buffer.length)) < 9) {//********
             Log.d(TAG, "Read " + count + " bytes from peripheral");
         }
+
         return buffer;
     }
 
@@ -143,7 +142,8 @@ public class PM25Presenter {
         String result = "";
         //第四字节*256 +第五字节
         if (chekckSum(bytes)) {
-        int i = (0xff&bytes[2]) * 256 + (0xff&bytes[3]);
+//        int i = (0xff&bytes[4]) * 256 + (0xff&bytes[5]);
+        int i =   (0xff&bytes[5]);
             result = getFromatDate() + "PM2.5:" + i+"μg/m³";
         }
         return result;
@@ -191,8 +191,8 @@ public class PM25Presenter {
      */
     private String getFromatDate() {
         String result = "";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss");
-        result = format.format(new Date());
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss");
+//        result = format.format(new Date());
         return result;
     }
 

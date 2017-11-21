@@ -34,7 +34,9 @@
         android:label="@string/app_name"
       >
         <uses-library android:name="com.google.android.things"/>
-        <activity android:name="com.example.androidthingsdemo.TestActivity">
+        <activity android:name="com.example.androidthingsdemo.TestActivity"
+
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,10 +49,6 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity" />
-        <activity android:name=".pwmspeaker.SpeakerActivity" />
-        <activity android:name=".driver2801.SimpleLedActivity" />
     </application>
 
 </manifest>

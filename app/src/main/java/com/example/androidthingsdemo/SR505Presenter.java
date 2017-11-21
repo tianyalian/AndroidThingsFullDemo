@@ -32,7 +32,7 @@ public class SR505Presenter {
     public void detect() {
         service = new PeripheralManagerService();
         try {
-            gpio_505 = service.openGpio(Constants.GPIO2);
+            gpio_505 = service.openGpio(Constants.GPIO5);
             callback = new GpioCallback() {
                 @Override
                 public boolean onGpioEdge(Gpio gpio) {
@@ -52,7 +52,7 @@ public class SR505Presenter {
             gpio_505.setDirection(Gpio.DIRECTION_IN);
             gpio_505.setEdgeTriggerType(Gpio.EDGE_BOTH);
             gpio_505.setActiveType(Gpio.ACTIVE_HIGH);
-            gpio_led = service.openGpio(Constants.GPIO3);
+            gpio_led = service.openGpio(Constants.GPIO6);
             gpio_led.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
         } catch (IOException e) {
             e.printStackTrace();
