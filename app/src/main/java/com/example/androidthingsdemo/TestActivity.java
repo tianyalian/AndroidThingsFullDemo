@@ -7,8 +7,12 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.androidthingsdemo.driver2801.Ws2801;
 import com.example.androidthingsdemo.ds18b20.DS18B20Presenter;
 import com.example.androidthingsdemo.motor.MotorPresenter;
+import com.example.androidthingsdemo.pm25.PM25Presenter;
+import com.example.androidthingsdemo.pwmspeaker.PWMPresenter;
+import com.example.androidthingsdemo.screen1206.Presenter1206;
 
 /**
  * Created by 瑜哥 on 2017/10/11.
@@ -16,9 +20,7 @@ import com.example.androidthingsdemo.motor.MotorPresenter;
 
 public class TestActivity extends Activity implements View.OnClickListener {
 
-
     private DS18B20Presenter presenter;
-    private MotorPresenter motorPresenter;
     private TextView tv_freq;
     private SeekBar seekBar_freq;
     private TextView tv_pwm;
@@ -42,15 +44,39 @@ public class TestActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-
         tv_freq = (TextView) findViewById(R.id.tv_freq);
         tv_freq.setOnClickListener(this);
         seekBar_freq = (SeekBar) findViewById(R.id.seekBar_freq);
-        seekBar_freq.setOnClickListener(this);
+        seekBar_freq.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                tv_freq.setText(seekBar.getProgress()+"HZ");
+                if (seekBar.getProgress() == 0) {
+                    PWMPresenter.getInstance().releaseResource();
+                } else {
+                  PWMPresenter.getInstance().setFrequency(seekBar.getProgress());
+                }
+            }
+        });
         tv_pwm = (TextView) findViewById(R.id.tv_pwm);
         tv_pwm.setOnClickListener(this);
         seekBar_pwm = (SeekBar) findViewById(R.id.seekBar_pwm);
-        seekBar_pwm.setOnClickListener(this);
+        seekBar_pwm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                tv_pwm.setText(seekBar.getProgress()+"%");
+                PWMPresenter.getInstance().setDuty(seekBar.getProgress());
+            }
+        });
         front_rotate = (Button) findViewById(R.id.front_rotate);
         front_rotate.setOnClickListener(this);
         back_rotate = (Button) findViewById(R.id.back_rotate);
@@ -75,29 +101,47 @@ public class TestActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.front_rotate:
-                if (motorPresenter == null)
-                    motorPresenter = new MotorPresenter();
-                motorPresenter.frontRotate();
+                MotorPresenter.getInstance().frontRotate();
                 break;
             case R.id.back_rotate:
-                if (motorPresenter == null)
-                    motorPresenter = new MotorPresenter();
-                motorPresenter.backRotate();
+                MotorPresenter.getInstance().backRotate();
                 break;
             case R.id.detected_people:
+                SR505Presenter.getInstance().detect();
                 break;
             case R.id.btn_rainb:
+
                 break;
             case R.id.btn_random:
+                Ws2801.getInstance().startFlash();
                 break;
-            case R.id.smoke:
+           case R.id.smoke:
+                PM25Presenter.getInstance().setOnUartListener(new PM25Presenter.onUartReceiveData() {
+                    @Override
+                    public void onReceive(String data) {
+                        tv_text.setText(data);
+                    }
+                });
+               PM25Presenter.getInstance().readData();
                 break;
             case R.id.btn_1206:
+                Presenter1206.getInstance().startTest();
                 break;
             case R.id.btn_clear:
+                releaseSource();
                 break;
         }
     }
 
+    /**
+     * 释放所有资源
+     */
+    private void releaseSource() {
+        MotorPresenter.getInstance().releaseSource();
+        SR505Presenter.getInstance().releaseResource();
+        Ws2801.getInstance().close();
+        Presenter1206.getInstance().releaseSource();
+        PM25Presenter.getInstance().releaseSource();
+    }
 
 }

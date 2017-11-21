@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class MotorPresenter {
 
+    static MotorPresenter motorPresenter;
     private Gpio gpio3;
     private Gpio gpio4;
     private Gpio gpio2;
@@ -21,6 +22,13 @@ public class MotorPresenter {
     char[] B_Rotation={0b1001,0b1100,0x06,0x03};//反转表格
 
     PeripheralManagerService service;
+
+    public static MotorPresenter getInstance() {
+        if (motorPresenter == null) {
+            motorPresenter = new MotorPresenter();
+        }
+        return motorPresenter;
+    }
 
     public MotorPresenter() {
         service = new PeripheralManagerService();
@@ -109,5 +117,20 @@ public class MotorPresenter {
         }
     }
 
+    /**
+     * 释放资源
+     */
+    public void releaseSource() {
+        if (gpio1!=null) {
+            try {
+                gpio1.close();
+                gpio2.close();
+                gpio3.close();
+                gpio4.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

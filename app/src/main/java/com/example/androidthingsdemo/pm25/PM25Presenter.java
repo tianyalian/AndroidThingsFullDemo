@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class PM25Presenter {
+    static PM25Presenter pm25Presenter;
 
     private static String TAG = "PM25Presenter",UART_NAME;
 
@@ -29,6 +30,13 @@ public class PM25Presenter {
     byte[] read = {(byte) 0xAA, 2, 0, 0, 0, 0, 1, 0x67, (byte) 0xBB};
     byte[] close = {(byte) 0xAA, 3, 0, 0, 0, 0, 1, 0x68, (byte) 0xBB};
     private UartDevice uartDevice;
+
+    public static PM25Presenter getInstance() {
+        if (pm25Presenter==null) {
+            pm25Presenter = new PM25Presenter();
+        }
+        return pm25Presenter;
+    }
 
     private UartDeviceCallback callback = new UartDeviceCallback() {
         @Override

@@ -13,11 +13,19 @@ import java.io.IOException;
 
 public class Presenter1206 {
     private static final String TAG = TestActivity.class.getSimpleName();
-
+    static Presenter1206 presenter1206;
     private static final String I2C_NAME = "I2C1";
     private static final int I2C_ADDRESS = 0x27;
     private LcdPcf8574 lcd;
+    private Thread thread;
+    private boolean isRun = true;
 
+    public static Presenter1206 getInstance() {
+        if (presenter1206 == null) {
+            presenter1206 = new Presenter1206();
+        }
+        return presenter1206;
+    }
 
     public Presenter1206() {
         try {
@@ -30,12 +38,12 @@ public class Presenter1206 {
         startTest();
     }
 
-    private void startTest() {
-        new Thread(new Runnable() {
+    public void startTest() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    while (isRun) {
                         lcd.setBacklight(true);
                         lcd.home();
                         lcd.clear();
@@ -100,7 +108,8 @@ public class Presenter1206 {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
     private void delay(long millis) {
         try {
@@ -110,5 +119,12 @@ public class Presenter1206 {
         }
     }
 
+    public void releaseSource() {
+        if (thread != null) {
+        thread.interrupt();
+        isRun = false;
+
+        }
+    }
 
 }

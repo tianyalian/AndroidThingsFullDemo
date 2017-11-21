@@ -12,12 +12,19 @@ import java.io.IOException;
  */
 
 public class SR505Presenter {
-
+    static SR505Presenter sr505Presenter;
 
     private PeripheralManagerService service;
     private Gpio gpio_505;
     private Gpio gpio_led;
     private GpioCallback callback;
+
+    public static SR505Presenter getInstance() {
+        if (sr505Presenter == null) {
+            sr505Presenter = new SR505Presenter();
+        }
+        return sr505Presenter;
+    }
 
     /**
      * 开始检测
@@ -45,10 +52,8 @@ public class SR505Presenter {
             gpio_505.setDirection(Gpio.DIRECTION_IN);
             gpio_505.setEdgeTriggerType(Gpio.EDGE_BOTH);
             gpio_505.setActiveType(Gpio.ACTIVE_HIGH);
-
             gpio_led = service.openGpio(Constants.GPIO3);
             gpio_led.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,7 +63,7 @@ public class SR505Presenter {
     /**
      * 关闭检测
      */
-    public void clos1eDetect() {
+    public void releaseResource() {
         if (gpio_505 != null && callback != null) {
             gpio_505.unregisterGpioCallback(callback);
         }

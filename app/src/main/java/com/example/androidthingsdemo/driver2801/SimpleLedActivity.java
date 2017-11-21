@@ -105,7 +105,7 @@ public class SimpleLedActivity extends Activity {
     public void onDestroy() {
         try {
             mLedstrip.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Exception closing LED strip", e);
         }
         super.onDestroy();
