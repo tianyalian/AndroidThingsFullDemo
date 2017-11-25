@@ -40,14 +40,9 @@ public class PM25Presenter {
         @Override
         public boolean onUartDeviceDataAvailable(UartDevice uart) {
             try {
-                byte[] bytes = readDatas();
-                if (uartListener != null && bytes[0] == -86) {
-                    String result = getPM25(bytes) + getPM10(bytes);
-                    if (!TextUtils.isEmpty(result))
-                    uartListener.onReceive(result);
-                closeSenser();
-                }
-            } catch (IOException e) {
+                Log.d(TAG, "onUartDeviceDataAvailable: 开始接收!");
+                 readDatas(uart);
+            } catch (Exception e) {
                 Log.w(TAG, "Unable to access UART device", e);
             }
             // Continue listening for more interrupts
@@ -59,6 +54,8 @@ public class PM25Presenter {
             super.onUartDeviceError(uart, error);
         }
     };
+
+
 
     public PM25Presenter() {
         PeripheralManagerService manager = new PeripheralManagerService();
@@ -102,15 +99,25 @@ public class PM25Presenter {
      * @return 获取的数据
      * @throws IOException
      */
-    private byte[] readDatas() throws IOException {
+    private void readDatas(UartDevice uart) throws IOException {
         int maxCount = 9;
         byte[] buffer = new byte[maxCount];
         int count;
-        while ((count = uartDevice.read(buffer, buffer.length)) < 9) {//********
-            Log.d(TAG, "Read " + count + " bytes from peripheral");
+        try {
+            count = uart.read(buffer, buffer.length) ;
+                Log.d(TAG, "Read " + count + " bytes from peripheral");
+            if (buffer[0] == -86 && buffer[2]<=3 && buffer[4]<=3) {
+                closeSenser();
+                String result = getPM25(buffer) + getPM10(buffer);
+                if (!TextUtils.isEmpty(result)) {
+                    uartListener.onReceive(result);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return buffer;
+
     }
 
     /**
@@ -120,7 +127,7 @@ public class PM25Presenter {
         try {
             uartDevice.write(open, open.length);
 //            Thread.sleep(1000);
-            TimeUnit.SECONDS.sleep(4);
+            TimeUnit.SECONDS.sleep(2);
             uartDevice.write(read, read.length);
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,8 +149,8 @@ public class PM25Presenter {
         String result = "";
         //第四字节*256 +第五字节
         if (chekckSum(bytes)) {
-//        int i = (0xff&bytes[4]) * 256 + (0xff&bytes[5]);
-        int i =   (0xff&bytes[5]);
+        int i = (0xff&bytes[4]) * 256 + (0xff&bytes[5]);
+//        int i =   (0xff&bytes[5]);
             result = getFromatDate() + "PM2.5:" + i+"μg/m³";
         }
         return result;
@@ -211,5 +218,11 @@ public class PM25Presenter {
      */
     public void setOnUartListener(onUartReceiveData listener) {
         uartListener = listener;
+    }
+
+
+    public static void main(String[] args) {
+        byte b = (byte) 0xAA;
+        System.out.println(0xff&b);
     }
 }
