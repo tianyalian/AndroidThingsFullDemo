@@ -34,6 +34,9 @@ UI ![UI  项目UI界面](https://github.com/tianyalian/AndroidThingsFullDemo/blo
 PWM speaker pwm驱动喇叭
 ![PWM speaker pwm驱动喇叭](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pwm__speaker.png)
 
+使用GPIO接口驱动24BYJ-48-5
+![使用GPIO接口驱动24BYJ-48-5](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/gpio_stepmoter.png)
+使用I2c接口驱动PCF8
 
 
 
