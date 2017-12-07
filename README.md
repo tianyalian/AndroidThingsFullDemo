@@ -34,9 +34,20 @@ UI ![UI  项目UI界面](https://github.com/tianyalian/AndroidThingsFullDemo/blo
 PWM speaker pwm驱动喇叭
 ![PWM speaker pwm驱动喇叭](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pwm__speaker.png)
 
-使用GPIO接口驱动24BYJ-48-5
-![使用GPIO接口驱动24BYJ-48-5](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/gpio_stepmoter.png)
-使用I2c接口驱动PCF8
+Use the GPIO API  interface to drive the 24byj-48-5v	 step motor
+GPIO：使用GPIO接口驱动24BYJ-48-5V步进电机
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/gpio_stepmoter.jpg)
 
+I2c：使用I2c接口驱动PCF8574T转接板接1206液晶
+I2c：Use the I2c interface to drive PCF8574T transfer plate	to connect 1206 LCD
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/i2c_1206.jpg)
+
+SPI：使用SPI接口WS2812 LED灯带
+SPI：Use SPI interface WS2812 LED light strip
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/spi_sw2812.jpg)
+
+UART：使用UART接口驱动雾霾传感器
+UART：Use UART API to drive haze sensors
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/uart_senser.jpg)
 
 
