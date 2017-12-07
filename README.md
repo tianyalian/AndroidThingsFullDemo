@@ -29,7 +29,17 @@ I2c：使用I2c接口驱动PCF8574T转接板接1206液晶
 
 PWM：使用PWM接口驱动喇叭
 
-PWM example：
+UI ![UI  项目UI界面](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic6.png)
+
+![PWM speaker pwm驱动喇叭](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic1.png)
+
+![使用GPIO接口驱动24BYJ-48-5V步进电机](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic2.png)
+
+![使用I2c接口驱动PCF8574T转接板接1206液晶](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic3.png)
+
+![使用UART接口驱动雾霾传感器](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic4.png)
+
+![使用SPI接口WS2812 LED灯带](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/pic5.png)
 
 
 
