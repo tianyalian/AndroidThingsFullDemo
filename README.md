@@ -40,11 +40,11 @@ GPIO：使用GPIO接口驱动24BYJ-48-5V步进电机
 
 I2c：使用I2c接口驱动PCF8574T转接板接1206液晶
 I2c：Use the I2c interface to drive PCF8574T transfer plate	to connect 1206 LCD
-![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/i2c_1206.jpg)
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/i2c_1206.png)
 
 SPI：使用SPI接口WS2812 LED灯带
 SPI：Use SPI interface WS2812 LED light strip
-![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/spi_sw2812.jpg)
+![](https://github.com/tianyalian/AndroidThingsFullDemo/blob/master/pic/spi_sw2812.png)
 
 UART：使用UART接口驱动雾霾传感器
 UART：Use UART API to drive haze sensors
